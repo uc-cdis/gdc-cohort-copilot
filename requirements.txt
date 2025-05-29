@@ -3,3 +3,4 @@ fastapi[standard]
 datamodel-code-generator
 jupyterlab
 pre-commit
+detect-secrets
