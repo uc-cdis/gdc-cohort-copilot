@@ -1,5 +1,21 @@
 # gdc-cohort-pilot
 
+Run the containerized web app with:
+```
+docker run -it --rm -p 8000:8000 gdc-cohort-pilot:latest
+```
+
+Any additional arguments after the image name are passed to `vllm serve`. The only limitation is that the vLLM model and port arguments should not be overridden.
+
+The app runs on port `8000` within the container, however if port `8000` is occupied on the host, you can remap it: https://docs.docker.com/reference/cli/docker/container/run/#publish
+
+If serving remotely, you may need to ssh tunnel from your local to the remote host:
+```
+ssh -NL 8000:localhost:8000 <user>@<remote>
+```
+
+### TODO
+* add instructions about GPU runtime
 
 ### Dev Notes
 * App server will run on port 8000 and should be exposed external to container
