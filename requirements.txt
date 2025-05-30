@@ -2,5 +2,6 @@ vllm==0.6.4.post1
 fastapi[standard]
 datamodel-code-generator
 jupyterlab
+ipywidgets
 pre-commit
 detect-secrets
