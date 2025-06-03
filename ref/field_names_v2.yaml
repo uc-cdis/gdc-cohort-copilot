@@ -1,0 +1,70 @@
+keys:
+  - program
+  - project
+  - disease type
+  - primary diagnosis
+  - primary site
+  - tissue or organ of origin
+  - gender
+  - race
+  - ethnicity
+  - age at diagnosis
+  - vital status
+  - ajcc clinical stage
+  - ajcc pathologic stage
+  - uicc clinical stage
+  - uicc pathologic stage
+  - tumor grade
+  - morphology
+  - year of diagnosis
+  - site of resection or biopsy
+  - sites of involvement
+  - laterality
+  - prior malignancy
+  - prior treatment
+  - synchronous malignancy
+  - progression or recurrence
+  - residual disease
+  - child pugh classification
+  - ishak fibrosis score
+  - ann arbor clinical stage
+  - ann arbor pathologic stage
+  - cog renal stage
+  - figo stage
+  - igcccg stage
+  - inss stage
+  - iss stage
+  - masaoka stage
+  - inpc grade
+  - who cns grade
+  - cog neuroblastoma risk group
+  - cog rhabdomyosarcoma risk group
+  - eln risk classification
+  - international prognostic index
+  - wilms tumor histologic subtype
+  - weiss assessment score
+  - best overall response
+  - therapeutic agents
+  - treatment intent type
+  - treatment outcome
+  - treatment type
+  - alcohol history
+  - alcohol intensity
+  - tobacco smoking status
+  - cigarettes per day
+  - pack years smoked
+  - tobacco smoking onset year
+  - tissue type
+  - biospecimen anatomic site
+  - specimen type
+  - preservation method
+  # - tumor code
+  - tumor descriptor
+  - analyte type
+  - data category
+  - data type
+  - experimental strategy
+  - workflow type
+  - data format
+  - platform
+  - access

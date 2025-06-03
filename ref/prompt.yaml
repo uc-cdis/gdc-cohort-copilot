@@ -1,0 +1,14 @@
+# name: prompt_templates
+# descriptions : 
+#   rewrite : You are an intelligent and effective biomedical language assitant.\nYour task is to restructure and rewrite the given sentence between << >> in simple but equivalent language using relevant medical terminology.\nRemove any redudant terms and generalize where possible.
+# \nPresent 4 options in a comma separated list for easy parsing.\n\nSentence:\n<<{}>>
+
+raw : 
+  query_format : '{}'
+  response_format : '{}'
+raw_to_soft :
+  query_format : '{} # Generate a valid json for the given description.'
+  response_format : '{}'
+soft_to_raw :
+  query_format : '# Generate a valid json for the following description. {}'
+  response_format : '{}'

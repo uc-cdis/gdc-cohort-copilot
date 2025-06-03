@@ -1,0 +1,100 @@
+{
+    "type": "object",
+    "properties": {
+        "op": {
+            "title": "root_operator",
+            "desc": "An enumeration",
+            "enum": [
+                "and",
+                "="
+            ],
+            "type": "string"
+        },
+        "content": {
+            "type": "array",
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/inner"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "oneOf" : [
+                            {"$ref": "#/definitions/inner"},
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "op" : {
+                                        "enum" : ["and"],
+                                        "type" : "string"
+                                    },
+                                    "content": {
+                                        "type": "array",
+                                        "items": {
+                                            "oneOf" : [
+                                                {"$ref": "#/definitions/inner"}
+                                            ]    
+                                        }
+                                    }
+                                }
+                            }
+                        ]    
+                    }
+                }
+            ]
+        }
+    },
+    "required": [
+        "op",
+        "content"
+    ],
+    "definitions": {
+        "inner": {
+            "type": "object",
+            "properties": {
+                "op": {
+                    "enum": [
+                        "in",
+                        "=",
+                        "<",
+                        ">",
+                        "<=",
+                        ">="
+                    ],
+                    "type": "string"
+                },
+                "content": {
+                    "type": "object",
+                    "properties": {
+                        "field": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 64
+                        },
+                        "value": {
+                            "anyOf": [
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 128
+                                    }
+                                },
+                                {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 32872
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "required": [
+                "op",
+                "content"
+            ]
+        }
+    }
+}
