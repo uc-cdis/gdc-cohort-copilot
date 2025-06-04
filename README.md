@@ -14,3 +14,7 @@ docker run -it --rm -p 8000:8000 --runtime nvidia --gpus all gdc-cohort-pilot:la
     ```bash
     ssh -NL 8000:localhost:8000 <user>@<remote>
     ```
+
+### TODO
+
+* figure out how to publish model to allow users to build from scratch
