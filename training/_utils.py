@@ -14,6 +14,26 @@ from datasets import Dataset, DatasetDict, load_dataset
 from sklearn.model_selection import GroupKFold
 
 
+def _assemble_cohort_json(field_val_dict):
+    """
+    function assembles a gdc cohort filter give a dictionary of field and value pairs
+    """
+    content_list = []
+    for key, val in field_val_dict.items():
+        if isinstance(val[1], list):
+            content = {"op": val[0], "content": {"field": key, "value": val[1]}}
+        else:
+            if isinstance(val[1], int):
+                content = {"op": val[0], "content": {"field": key, "value": val[1]}}
+            else:
+                content = {"op": val[0], "content": {"field": key, "value": [val[1]]}}
+
+        content_list.append(content)
+    # put together the cohort
+    data = {"op": "and", "content": content_list}
+    return data
+
+
 def _create_context_size_dataset(context_size):
     base_text = "This is test data "
     all_data = []

@@ -1,3 +1,4 @@
+# June-04-2025 (validated)
 project.program.name:
   - APOLLO
   - BEATAML1.0
@@ -128,6 +129,7 @@ disease_type:
   - leukemias, nos
   - lipomatous neoplasms
   - lymphoid leukemias
+  - malignant lymphomas, nos or diffuse
   - mature b-cell lymphomas
   - mature t- and nk-cell lymphomas
   - meningiomas
@@ -674,6 +676,7 @@ diagnoses.ajcc_clinical_stage:
   - stage iva
   - stage ivb
   - stage ivc
+  - stage x
 diagnoses.ajcc_pathologic_stage:
   - not reported
   - stage 0
@@ -707,22 +710,29 @@ diagnoses.ajcc_pathologic_stage:
   - stage x
   - unknown
 diagnoses.uicc_clinical_stage:
+  - not reported
+  - stage 0
   - stage i
   - stage ia
   - stage ib
   - stage iia
   - stage iib
+  - stage iic
+  - stage iii
   - stage iiia
   - stage iiib
   - stage iiic
   - stage iv
   - stage iva
 diagnoses.uicc_pathologic_stage:
+  - not reported
   - stage 0
   - stage i
   - stage ia
   - stage ib
   - stage iia
+  - stage iib
+  - stage iii
   - stage iiia
   - stage iiib
   - stage iiic
@@ -941,164 +951,7 @@ diagnoses.morphology:
   - not reported
   - unknown
 diagnoses.year_of_diagnosis:
-  - abdomen, nos
-  - adrenal gland, nos
-  - ampulla of vater
-  - anal canal
-  - anterior mediastinum
-  - anus, nos
-  - aortic body and other paraganglia
-  - appendix
-  - ascending colon
-  - axillary tail of breast
-  - base of tongue, nos
-  - biliary tract, nos
-  - bladder, nos
-  - blood
-  - body of pancreas
-  - body of stomach
-  - bone marrow
-  - bone, nos
-  - bones of skull and face and associated joints
-  - border of tongue
-  - brain stem
-  - brain, nos
-  - breast, nos
-  - cardia, nos
-  - cecum
-  - cerebellum, nos
-  - cerebrum
-  - cervix uteri
-  - cheek mucosa
-  - choroid
-  - ciliary body
-  - colon, nos
-  - connective, subcutaneous and other soft tissues of abdomen
-  - connective, subcutaneous and other soft tissues of head, face, and neck
-  - connective, subcutaneous and other soft tissues of lower limb and hip
-  - connective, subcutaneous and other soft tissues of pelvis
-  - connective, subcutaneous and other soft tissues of thorax
-  - connective, subcutaneous and other soft tissues of trunk, nos
-  - connective, subcutaneous and other soft tissues of upper limb and shoulder
-  - connective, subcutaneous and other soft tissues, nos
-  - corpus uteri
-  - cortex of adrenal gland
-  - descending colon
-  - dome of bladder
-  - duodenum
-  - endometrium
-  - esophagus, nos
-  - external ear
-  - extrahepatic bile duct
-  - eye, nos
-  - fallopian tube
-  - floor of mouth, nos
-  - frontal lobe
-  - fundus uteri
-  - gallbladder
-  - gastrointestinal tract, nos
-  - gum, nos
-  - head of pancreas
-  - head, face or neck, nos
-  - heart
-  - hepatic flexure of colon
-  - ileum
-  - intra-abdominal lymph nodes
-  - intrathoracic lymph nodes
-  - isthmus uteri
-  - jejunum
-  - kidney, nos
-  - larynx, nos
-  - lip, nos
-  - liver
-  - long bones of lower limb and associated joints
-  - long bones of upper limb, scapula and associated joints
-  - lower gum
-  - lower lobe, lung
-  - lower third of esophagus
-  - lung, nos
-  - lymph node, nos
-  - lymph nodes of axilla or arm
-  - lymph nodes of head, face and neck
-  - lymph nodes of inguinal region or leg
-  - main bronchus
-  - major salivary gland, nos
-  - mandible
-  - mediastinum, nos
-  - medulla of adrenal gland
-  - middle lobe, lung
-  - mouth, nos
-  - myometrium
-  - nasal cavity
-  - nervous system, nos
-  - not reported
-  - occipital lobe
-  - orbit, nos
-  - oropharynx, nos
-  - other ill-defined sites
-  - ovary
-  - overlapping lesion of colon
-  - overlapping lesion of connective, subcutaneous and other soft tissues
-  - overlapping lesion of digestive system
-  - overlapping lesion of eye and adnexa
-  - overlapping lesion of female genital organs
-  - overlapping lesion of ill-defined sites
-  - overlapping lesion of lip, oral cavity and pharynx
-  - overlapping lesion of rectum, anus and anal canal
-  - pancreas, nos
-  - pancreatic duct
-  - pancreatic neck
-  - parietal lobe
-  - parotid gland
-  - pelvic bones, sacrum, coccyx and associated joints
-  - pelvic lymph nodes
-  - pelvis, nos
-  - penis, nos
-  - peripheral nerves and autonomic nervous system of upper limb and shoulder
-  - peritoneum, nos
-  - pituitary gland
-  - pleura, nos
-  - prostate gland
-  - rectosigmoid junction
-  - rectum, nos
-  - retroperitoneum
-  - short bones of lower limb and associated joints
-  - sigmoid colon
-  - skin of lower limb and hip
-  - skin of other and unspecified parts of face
-  - skin of scalp and neck
-  - skin of trunk
-  - skin of upper limb and shoulder
-  - skin, nos
-  - small intestine, nos
-  - specified parts of peritoneum
-  - spermatic cord
-  - spinal cord
-  - spinal meninges
-  - spleen
-  - splenic flexure of colon
-  - stomach, nos
-  - submandibular gland
-  - tail of pancreas
-  - temporal lobe
-  - testis, nos
-  - thorax, nos
-  - thymus
-  - thyroid gland
-  - tongue, nos
-  - tonsil, nos
-  - trachea
-  - transverse colon
-  - unknown
-  - unknown primary site
-  - upper lobe, lung
-  - ureter
-  - urethra
-  - uterus, nos
-  - vagina, nos
-  - vertebral column
-  - vestibule of mouth
-  - vulva, nos
+  - NA
 diagnoses.site_of_resection_or_biopsy:
   - abdomen, nos
   - adrenal gland, nos
@@ -1155,11 +1008,14 @@ diagnoses.site_of_resection_or_biopsy:
   - frontal lobe
   - fundus uteri
   - gallbladder
+  - gastric antrum
   - gastrointestinal tract, nos
+  - glottis
   - gum, nos
   - head of pancreas
   - head, face or neck, nos
   - heart
+  - hematopoietic system, nos
   - hepatic flexure of colon
   - ileum
   - intra-abdominal lymph nodes
@@ -1168,6 +1024,7 @@ diagnoses.site_of_resection_or_biopsy:
   - jejunum
   - kidney, nos
   - larynx, nos
+  - lateral wall of bladder
   - lip, nos
   - liver
   - long bones of lower limb and associated joints
@@ -1186,6 +1043,7 @@ diagnoses.site_of_resection_or_biopsy:
   - mediastinum, nos
   - medulla of adrenal gland
   - middle lobe, lung
+  - middle third of esophagus
   - mouth, nos
   - myometrium
   - nasal cavity
@@ -1196,6 +1054,7 @@ diagnoses.site_of_resection_or_biopsy:
   - oropharynx, nos
   - other ill-defined sites
   - ovary
+  - overlapping lesion of bladder
   - overlapping lesion of colon
   - overlapping lesion of connective, subcutaneous and other soft tissues
   - overlapping lesion of digestive system
@@ -1253,6 +1112,7 @@ diagnoses.site_of_resection_or_biopsy:
   - upper lobe, lung
   - ureter
   - urethra
+  - uterine adnexa
   - uterus, nos
   - vagina, nos
   - vertebral column
@@ -1261,6 +1121,7 @@ diagnoses.site_of_resection_or_biopsy:
 diagnoses.sites_of_involvement:
   - abdomen
   - abdominal peritoneum
+  - adnexa
   - adrenal gland, nos
   - anus, nos
   - appendix
@@ -1289,6 +1150,7 @@ diagnoses.sites_of_involvement:
   - central lung
   - central nervous system
   - cerebrospinal fluid
+  - cervix
   - chest wall
   - colon, nos
   - common or superficial femoral vein
@@ -1305,6 +1167,8 @@ diagnoses.sites_of_involvement:
   - eye, ciliary body
   - eye, iris
   - fallopian tube, left
+  - fallopian tube, nos
+  - fallopian tube, right
   - gallbladder
   - gastrointestinal tract
   - great blood vessel
@@ -1313,6 +1177,7 @@ diagnoses.sites_of_involvement:
   - hilar fat
   - inferior vena cava
   - kidney, nos
+  - kidney, upper pole
   - liver
   - lung, nos
   - lymph node, axillary
@@ -1329,6 +1194,7 @@ diagnoses.sites_of_involvement:
   - lymph node, regional
   - lymph node, retroperitoneal
   - lymph node, splenic
+  - lymph node, subcarinal
   - lymph node, submandibular
   - lymph node, supraclavicular
   - mandible
@@ -1350,8 +1216,11 @@ diagnoses.sites_of_involvement:
   - pancreas head
   - pancreas tail
   - pancreas, nos
+  - parametrium, left
+  - parametrium, right
   - parotid gland
   - pelvic lymph node(s)
+  - pelvic peritoneum
   - pelvic vein, common, external or iliac
   - pelvis
   - peri-aortic lymph node(s)
@@ -1369,6 +1238,7 @@ diagnoses.sites_of_involvement:
   - rete testis
   - retroperitoneum
   - scalp
+  - sigmoid colon
   - sinus
   - skin
   - skin, extremities
@@ -1385,6 +1255,7 @@ diagnoses.sites_of_involvement:
   - tongue
   - tonsil
   - transplanted kidney
+  - transverse colon
   - tunica albuginea
   - tunica vaginalis
   - unknown
@@ -1400,25 +1271,25 @@ diagnoses.laterality:
   - right
   - unknown
 diagnoses.prior_malignancy:
-  - no
-  - not reported
-  - unknown
-  - yes
+  - "no"
+  - "not reported"
+  - "unknown"
+  - "yes"
 diagnoses.prior_treatment:
-  - no
-  - not reported
-  - unknown
-  - yes
+  - "no"
+  - "not reported"
+  - "unknown"
+  - "yes"
 diagnoses.synchronous_malignancy:
-  - no
-  - not reported
-  - unknown
-  - yes
+  - "no"
+  - "not reported"
+  - "unknown"
+  - "yes"
 diagnoses.progression_or_recurrence:
-  - no
-  - not reported
-  - unknown
-  - yes
+  - "no"
+  - "not reported"
+  - "unknown"
+  - "yes"
 diagnoses.residual_disease:
   - not reported
   - r0
@@ -1452,6 +1323,9 @@ diagnoses.ann_arbor_pathologic_stage:
   - stage iii
   - stage iv
 diagnoses.cog_renal_stage:
+  - stage i
+  - stage ii
+  - stage iii
   - stage iv
 diagnoses.figo_stage:
   - not reported
@@ -1463,6 +1337,7 @@ diagnoses.figo_stage:
   - stage ib1
   - stage ib2
   - stage ic
+  - stage ic2
   - stage ii
   - stage iia
   - stage iia1
@@ -1489,6 +1364,7 @@ diagnoses.inss_stage:
   - stage 3
   - stage 4
   - stage 4s
+  - unknown
 diagnoses.iss_stage:
   - i
   - ii
@@ -1503,6 +1379,7 @@ diagnoses.masaoka_stage:
   - stage ivb
 diagnoses.inpc_grade:
   - differentiating
+  - poorly differentiated
   - undifferentiated or poorly differentiated
   - unknown
 diagnoses.who_cns_grade:
@@ -1806,6 +1683,7 @@ diagnoses.treatments.treatment_type:
   - radiation, implants
   - radiation, intensity-modulated radiotherapy
   - radiation, internal
+  - radiation, mixed photon beam
   - radiation, proton beam
   - radiation, radioisotope
   - radiation, stereotactic/gamma knife/srs
@@ -1825,10 +1703,10 @@ diagnoses.treatments.treatment_type:
   - unknown
   - whipple
 exposures.alcohol_history:
-  - no
-  - not reported
-  - unknown
-  - yes
+  - "no"
+  - "not reported"
+  - "unknown"
+  - "yes"
 exposures.alcohol_intensity:
   - drinker
   - heavy drinker

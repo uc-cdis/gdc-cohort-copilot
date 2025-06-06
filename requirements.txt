@@ -31,3 +31,5 @@ datasets==3.1.0
 tokenizers==0.21.1
 transformers==4.50.0
 evaluate==0.4.2
+peft==0.13.2
+trl==0.12.1

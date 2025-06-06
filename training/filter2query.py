@@ -1,6 +1,10 @@
 # run command
 """
-python3 ./method/filter2query.py --model mistralai/Mistral-7B-Instruct-v0.3 --batch_size 16 --filter_csv /opt/gpudata/anirudh/git-repos/gdc-eval/ref-data/cohorts_2024-10-25.tsv --output_dir /opt/gpudata/gdc-eval/results/datasets
+python3 ./training/filter2query.py \
+--model mistralai/Mistral-7B-Instruct-v0.3 \
+--batch_size 16 \
+--filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_100k_v2.tsv \
+--output_dir /opt/gpudata/gdc-eval/results/datasets
 """
 
 
@@ -84,13 +88,12 @@ def generate_query_statements(
 ):
     os.makedirs(output_dir, exist_ok=True)
     model_name = os.path.basename(model)
-    filename = f"{model_name}_generated_queries_v2.csv"
+    filename = f"{model_name}_generated_queries_100k_naive_v2.csv"
     result_csv = os.path.join(output_dir, filename)
 
     sampling_params = SamplingParams(  # greedy
         n=1,
         temperature=0,
-        use_beam_search=False,
         seed=42,
         max_tokens=4096,
         stop=["|<eos>|"],
