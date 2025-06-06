@@ -49,16 +49,16 @@ Sentence:
 ffpe samples for hematopoietic system, nos that belong to the CGCI-BLGSP project. |<eos>|
 """
 
-prompt = f"""
+prompt = """
 Given the following examples of dict and sentence pairs, generate the sentence that describes a new dict between <<>>.
 Use the 'field' and it's corresponding 'value' information to correctly identify the different categories.
 Examples:
 
-{example_1}
+{}
 
-{example_2}
+{}
 
-<<{{}}>>
+<<{}>>
 
 Sentence:
 """
@@ -68,7 +68,7 @@ def generate_queries(
     *,  # enforce kwargs
     model: str,
     input_tsv: str,
-    output_tsv: str,
+    output_csv: str,
 ):
     sampling_params = SamplingParams(  # greedy
         n=1,
@@ -86,7 +86,9 @@ def generate_queries(
 
     dataset_df = pd.read_csv(input_tsv, sep="\t")
 
-    prompts = [prompt.format(x) for x in dataset_df[DEFAULT_FILTERS_COL]]
+    prompts = [
+        prompt.format(example_1, example_2, x) for x in dataset_df[DEFAULT_FILTERS_COL]
+    ]
 
     outputs = llm.generate(prompts, sampling_params)
     outputs = [o.outputs[0].text for o in outputs]
@@ -97,14 +99,14 @@ def generate_queries(
             "queries": outputs,
         }
     )
-    out_df.to_csv(output_tsv, index=False)
+    out_df.to_csv(output_csv, index=False)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True)
     parser.add_argument("--input-tsv", required=True)
-    parser.add_argument("--output-tsv", required=True)
+    parser.add_argument("--output-csv", required=True)
     args = parser.parse_args()
     return args
 
@@ -114,5 +116,5 @@ if __name__ == "__main__":
     generate_queries(
         model=args.model,
         input_tsv=args.input_tsv,
-        output_tsv=args.output_tsv,
+        output_csv=args.output_csv,
     )
