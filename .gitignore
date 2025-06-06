@@ -168,4 +168,6 @@ temp-*
 temp_*
 temp/
 
+data/
+
 /model

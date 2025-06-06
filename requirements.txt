@@ -1,6 +1,6 @@
 vllm==0.6.4.post1
+transformers==4.50.0
 fastapi[standard]
-datamodel-code-generator
 jupyterlab
 ipywidgets
 pre-commit
