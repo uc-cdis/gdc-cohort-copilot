@@ -44,7 +44,7 @@ def main(args):
     rng = np.random.default_rng(seed=42)
     rng.shuffle(possible_idxs)
     test_idxs = []
-    with tqdm(total=args.test_size) as pbar:
+    with tqdm(total=args.test_size, desc="Validating Test Samples") as pbar:
         for idx in possible_idxs:
             response = requests.get(
                 "https://api.gdc.cancer.gov/cases",
