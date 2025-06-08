@@ -2,6 +2,8 @@ import argparse
 
 import numpy as np
 import pandas as pd
+import requests
+from tqdm import tqdm
 from transformers import AutoConfig, AutoTokenizer
 
 
@@ -24,6 +26,7 @@ def main(args):
         for k in args.models
     }
 
+    # first select possible samples which meet length criteria
     masks = dict()
     for model, (tok, cfg) in toks.items():
         max_len = cfg.max_position_embeddings
@@ -31,13 +34,42 @@ def main(args):
         lens = pd.Series([len(x) for x in tok_ids.input_ids])
         masks[model] = lens <= max_len
 
-    mask = df["filters"] != 0
+    mask = df["filters"] != 0  # dummy all true mask to start
     for model, m in masks.items():
-        mask &= m
+        mask &= m  # bitwise AND over token length for each model
 
     possible_idxs = np.argwhere(mask).squeeze()
+
+    # next check that samples do not result in null cohorts
     rng = np.random.default_rng(seed=42)
-    test_idxs = rng.choice(possible_idxs, size=(args.test_size,), replace=False)
+    rng.shuffle(possible_idxs)
+    test_idxs = []
+    with tqdm(total=args.test_size) as pbar:
+        for idx in possible_idxs:
+            response = requests.get(
+                "https://api.gdc.cancer.gov/cases",
+                params={
+                    "filters": df.loc[idx, "filters"],
+                    "fields": "submitter_id,case_id",
+                    "size": "0",
+                },
+            )
+
+            # null cohort
+            if response.json()["data"]["pagination"]["total"] == 0:
+                continue
+
+            test_idxs.append(idx)
+            pbar.update(1)
+            if len(test_idxs) >= args.test_size:
+                break
+
+    if len(test_idxs) < args.test_size:
+        print(
+            f"Could not select targeted {args.test_size} test samples, "
+            f"selection yielded {len(test_idxs)} test samples."
+        )
+    test_idxs = np.asarray(test_idxs)
 
     df_train = df.loc[~pd.Series(np.arange(len(df))).isin(test_idxs)]
     df_test = df.loc[test_idxs].sort_index()
