@@ -51,7 +51,11 @@ async def generate_cohort(query: Query) -> Response:
         extra_body={"guided_json": JSON_SCHEMA},
     )
 
-    return Response(cohort=completion.choices[0].text)
+    cohort_filter = completion.choices[0].text
+    filter_instance = GDCCohortSchema.model_validate_json(cohort_filter)
+    formatted_filter = filter_instance.model_dump_json(indent=2)
+
+    return Response(cohort=formatted_filter)
 
 
 app = FastAPI()
