@@ -54,12 +54,12 @@ def generate_filter(client, field_values, query):
 
 def main(args):
     df = pd.read_csv(args.input_csv)
-    with open("data/fields_short_v2.yaml", "r") as f:
+    with open(args.field_value_yaml, "r") as f:
         field_values = f.read()
 
     api_key = os.environ.get("OPENAI_API_KEY", None)
     if api_key is None:
-        api_key = getpass("OPENAI_API_KEY")
+        api_key = getpass("Input OPENAI_API_KEY: ")
     client = OpenAI(api_key=api_key)
 
     generations = []
