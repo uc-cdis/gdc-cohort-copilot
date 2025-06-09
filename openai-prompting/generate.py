@@ -6,7 +6,7 @@ import pandas as pd
 from openai import OpenAI
 from tqdm import tqdm
 
-from app.schema import GDCCohortSchema
+from schema import GDCCohortSchema  # isort: skip
 
 
 def parse_args():
