@@ -5,6 +5,33 @@ python3 ./training/filter2query.py \
 --batch_size 16 \
 --filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_100k_v2.tsv \
 --output_dir /opt/gpudata/gdc-eval/results/datasets
+
+
+# 1 M dataset split runs
+
+# cuda:1
+
+python3 ./training/filter2query.py \
+--model mistralai/Mistral-7B-Instruct-v0.3 \
+--batch_size 16 \
+--filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1_part1.tsv \
+--output_dir /opt/gpudata/gdc-eval/results/datasets
+
+# cuda:2
+
+python3 ./training/filter2query.py \
+--model mistralai/Mistral-7B-Instruct-v0.3 \
+--batch_size 16 \
+--filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1_part2.tsv \
+--output_dir /opt/gpudata/gdc-eval/results/datasets
+
+# cuda:3
+
+python3 ./training/filter2query.py \
+--model mistralai/Mistral-7B-Instruct-v0.3 \
+--batch_size 16 \
+--filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1_part3.tsv \
+--output_dir /opt/gpudata/gdc-eval/results/datasets
 """
 
 
@@ -88,7 +115,8 @@ def generate_query_statements(
 ):
     os.makedirs(output_dir, exist_ok=True)
     model_name = os.path.basename(model)
-    filename = f"{model_name}_generated_queries_100k_naive_v2.csv"
+    basename = os.path.basename(filter_csv)
+    filename = f"{basename.split('.')[0]}_queries.csv"
     result_csv = os.path.join(output_dir, filename)
 
     sampling_params = SamplingParams(  # greedy

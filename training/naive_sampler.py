@@ -20,7 +20,7 @@ cbf = list(cbf_mappings.keys())
 start = time.time()
 # step 1 :
 df = 6  # degrees of freedom, also the mean of the chi-squared distribution
-num_samples = 100000
+num_samples = 1_000_000
 samples = np.round(np.random.chisquare(df=df, size=num_samples)).astype(
     int
 )  # sample from chi-squared and round to nearest integer
@@ -85,5 +85,5 @@ print(len(invalid))
 print(f"computation time: {time.time() - start} secs")
 
 pd.DataFrame({"filters": [json.dumps(c) for c in cohorts]}).to_csv(
-    "/opt/gpudata/gdc-eval/results/datasets/naive_sampler_100k_v2.tsv", sep="\t"
+    "/opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1.tsv", sep="\t"
 )
