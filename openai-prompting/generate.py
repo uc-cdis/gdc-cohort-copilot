@@ -53,7 +53,7 @@ def generate_filter(client, field_values, query):
 
 
 def main(args):
-    df = pd.read_csv(args.input_csv)
+    queries = pd.read_csv(args.input_csv)["queries"].to_list()
     with open(args.field_value_yaml, "r") as f:
         field_values = f.read()
 
@@ -62,17 +62,31 @@ def main(args):
         api_key = getpass("Input OPENAI_API_KEY: ")
     client = OpenAI(api_key=api_key)
 
-    generations = []
-    for query in tqdm(df["queries"]):
-        generation = generate_filter(
-            client=client,
-            field_values=field_values,
-            query=query,
-        )
-        generations.append(generation)
+    total = len(queries)
+    start_idx = 0
+    header = True
+    if os.path.exists(args.output_csv):
+        print("Output CSV exists, resuming from previously interrupted run.")
+        temp = pd.read_csv(args.output_csv)
+        start_idx = len(temp)
+        header = start_idx == 0
+        queries = queries[start_idx:]
 
-    df["generations"] = generations
-    df[["queries", "generations"]].to_csv(args.output_csv, index=False)
+    with tqdm(total=total, initial=start_idx) as pbar:
+        for query in queries:
+            generation = generate_filter(
+                client=client,
+                field_values=field_values,
+                query=query,
+            )
+            temp = pd.DataFrame(
+                {
+                    "queries": [query],
+                    "generations": [generation],
+                }
+            )
+            temp.to_csv(args.output_csv, index=False, mode="a", header=header)
+            pbar.update(1)
 
 
 if __name__ == "__main__":
