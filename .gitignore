@@ -169,5 +169,6 @@ temp_*
 temp/
 
 data/
+data
 
 /model
