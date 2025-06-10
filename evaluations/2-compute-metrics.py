@@ -3,6 +3,7 @@ import pickle
 
 import evaluate
 import pandas as pd
+from tqdm import tqdm
 from transformers import AutoTokenizer
 
 
@@ -33,7 +34,10 @@ def compute_case_metrics(
     tprs = []
     ious = []
     exacts = []
-    for true_set, pred_set in zip(true_cases, pred_cases):
+    for true_set, pred_set in zip(
+        tqdm(true_cases, desc="Computing Case Metrics"),
+        pred_cases,
+    ):
         true_set = set(true_set)
         pred_set = set(pred_set)
 
@@ -65,16 +69,19 @@ def compute_query_metrics(
     model_name = "allenai/scibert_scivocab_uncased"
     tok = AutoTokenizer.from_pretrained(model_name)
 
-    def _truncate(queries: list[str]) -> list[str]:
+    def _truncate(queries: list[str], title: str = "") -> list[str]:
         overflows = [len(x) > 512 for x in tok(queries)["input_ids"]]
-        print(f"Truncating {sum(overflows)} queries for BERTScore.")
+        if title != "":
+            title = " " + title.strip()
+        print(f"Truncating {sum(overflows)}{title} queries for BERTScore")
         input_ids = tok(queries, max_length=512, truncation=True)["input_ids"]
         return tok.batch_decode(input_ids, skip_special_tokens=True)
 
+    print("Computing BERTScore")
     bertscore = evaluate.load("bertscore")
     scores = bertscore.compute(
-        predictions=_truncate(rev_queries),
-        references=_truncate(true_queries),
+        predictions=_truncate(rev_queries, title="reverse-prediction"),
+        references=_truncate(true_queries, title="ground-truth"),
         model_type=model_name,
     )
 
