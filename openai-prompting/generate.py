@@ -3,7 +3,7 @@ import os
 from getpass import getpass
 
 import pandas as pd
-from openai import OpenAI
+from openai import LengthFinishReasonError, OpenAI
 from tqdm import tqdm
 
 from schema import GDCCohortSchema  # isort: skip
@@ -74,11 +74,17 @@ def main(args):
 
     with tqdm(total=total, initial=start_idx) as pbar:
         for query in queries:
-            generation = generate_filter(
-                client=client,
-                field_values=field_values,
-                query=query,
-            )
+            try:
+                generation = generate_filter(
+                    client=client,
+                    field_values=field_values,
+                    query=query,
+                )
+            except Exception as e:
+                if isinstance(e, LengthFinishReasonError):
+                    generation = "NOT ENOUGH TOKENS"
+                else:
+                    raise e
             temp = pd.DataFrame(
                 {
                     "queries": [query],
