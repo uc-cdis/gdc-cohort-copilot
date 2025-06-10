@@ -29,6 +29,13 @@ def get_cases(filters: str) -> list[str]:
             "size": "46000",  # > num cases in GDC
         },
     )
+    if response.status_code == requests.codes.INTERNAL_SERVER_ERROR:
+        # GDC API returns 500 if filter is poorly formatted.
+        # While we validate with the schema, the schema is not perfect.
+        # e.g. if age_at_diagnosis op is "=", this is schema valid but api invalid.
+        return []
+    elif response.status_code != requests.codes.OK:
+        return [f"GOT {response.status_code} RESPONSE, RERUN"]
     data = response.json()["data"]
     cases = [x["case_id"] for x in data["hits"]]
     return cases
