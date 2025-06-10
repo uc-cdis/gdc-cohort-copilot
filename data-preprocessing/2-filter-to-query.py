@@ -1,10 +1,6 @@
 import argparse
 
 import pandas as pd
-from vllm import LLM, SamplingParams
-
-DEFAULT_FILTERS_COL = "filters"
-
 
 # Prompt
 example_1 = """
@@ -67,10 +63,13 @@ Sentence:
 def generate_queries(
     *,  # enforce kwargs
     model: str,
-    input_tsv: str,
+    input_csv: str,
+    input_col: str,
     output_csv: str,
 ):
-    sampling_params = SamplingParams(  # greedy
+    from vllm import LLM, SamplingParams  # delay import to speed up cmd line
+
+    sampling_params = SamplingParams(
         n=1,
         temperature=0,
         seed=42,
@@ -84,17 +83,18 @@ def generate_queries(
         enforce_eager=True,
     )
 
-    dataset_df = pd.read_csv(input_tsv, sep="\t")
+    sep = None
+    if input_csv.endswith(".tsv"):
+        sep = "\t"
+    dataset_df = pd.read_csv(input_csv, sep=sep)
 
-    prompts = [
-        prompt.format(example_1, example_2, x) for x in dataset_df[DEFAULT_FILTERS_COL]
-    ]
+    prompts = [prompt.format(example_1, example_2, x) for x in dataset_df[input_col]]
 
     outputs = llm.generate(prompts, sampling_params)
     outputs = [o.outputs[0].text for o in outputs]
     out_df = pd.DataFrame(
         {
-            "filters": dataset_df[DEFAULT_FILTERS_COL],
+            "filters": dataset_df[input_col],
             "prompts": prompts,
             "queries": outputs,
         }
@@ -105,7 +105,8 @@ def generate_queries(
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True)
-    parser.add_argument("--input-tsv", required=True)
+    parser.add_argument("--input-csv", required=True)
+    parser.add_argument("--input-col", default="filters")
     parser.add_argument("--output-csv", required=True)
     args = parser.parse_args()
     return args
@@ -115,6 +116,7 @@ if __name__ == "__main__":
     args = parse_args()
     generate_queries(
         model=args.model,
-        input_tsv=args.input_tsv,
+        input_csv=args.input_csv,
+        input_col=args.input_col,
         output_csv=args.output_csv,
     )

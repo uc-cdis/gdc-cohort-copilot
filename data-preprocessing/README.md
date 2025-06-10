@@ -1,17 +1,17 @@
 ### Dev Notes
 
 ```bash
-python clean-user-cohorts.py \
+python 1-clean-user-cohorts.py \
 --input-tsv /path/to/raw_cohorts.tsv \
 --core-fields-yaml /path/to/fields.yaml \
 --output-tsv /path/to/selected_cohorts.tsv
 
-python filter2query.py \
+python 2-filter-to-query.py \
 --model mistralai/Mistral-7B-Instruct-v0.3 \
---input-tsv /path/to/selected_cohorts.tsv \
+--input-csv /path/to/selected_cohorts.tsv \
 --output-csv /path/to/generated_queries.csv
 
-python split-dataset.py \
+python 3-split-dataset.py \
 --models \
 openai-community/gpt2 \
 facebook/bart-base \
