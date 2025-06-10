@@ -9,6 +9,7 @@ python 1-clean-user-cohorts.py \
 python 2-filter-to-query.py \
 --model mistralai/Mistral-7B-Instruct-v0.3 \
 --input-csv /path/to/selected_cohorts.tsv \
+--input-filter-col filters \
 --output-csv /path/to/generated_queries.csv
 
 python 3-split-dataset.py \

@@ -48,7 +48,10 @@ def generate_filter(client, field_values, query):
     result = completion.choices[0].message.parsed
 
     # match format of input query
-    ret = result.model_dump_json(indent=0).replace("\n", "").replace('",', '", ')
+    ret = result.model_dump_json(indent=0)
+    ret = ret.replace("\n", "")
+    ret = ret.replace('",', '", ')
+    ret = ret.replace("},", "}, ")
     return ret
 
 
@@ -64,13 +67,12 @@ def main(args):
 
     total = len(queries)
     start_idx = 0
-    header = True
     if os.path.exists(args.output_csv):
         print("Output CSV exists, resuming from previously interrupted run.")
         temp = pd.read_csv(args.output_csv)
         start_idx = len(temp)
-        header = start_idx == 0
         queries = queries[start_idx:]
+    header = start_idx == 0
 
     with tqdm(total=total, initial=start_idx) as pbar:
         for query in queries:
