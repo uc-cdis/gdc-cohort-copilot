@@ -66,6 +66,8 @@ def compute_query_metrics(
     tok = AutoTokenizer.from_pretrained(model_name)
 
     def _truncate(queries: list[str]) -> list[str]:
+        overflows = [len(x) > 512 for x in tok(queries)["input_ids"]]
+        print(f"Truncating {sum(overflows)} queries for BERTScore.")
         input_ids = tok(queries, max_length=512, truncation=True)["input_ids"]
         return tok.batch_decode(input_ids, skip_special_tokens=True)
 
