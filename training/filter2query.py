@@ -1,52 +1,16 @@
-# run command
-"""
-python3 ./training/filter2query.py \
---model mistralai/Mistral-7B-Instruct-v0.3 \
---batch_size 16 \
---filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_100k_v2.tsv \
---output_dir /opt/gpudata/gdc-eval/results/datasets
-
-
-# 1 M dataset split runs
-
-# cuda:1
-
-python3 ./training/filter2query.py \
---model mistralai/Mistral-7B-Instruct-v0.3 \
---batch_size 16 \
---filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1_part1.tsv \
---output_dir /opt/gpudata/gdc-eval/results/datasets
-
-# cuda:2
-
-python3 ./training/filter2query.py \
---model mistralai/Mistral-7B-Instruct-v0.3 \
---batch_size 16 \
---filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1_part2.tsv \
---output_dir /opt/gpudata/gdc-eval/results/datasets
-
-# cuda:3
-
-python3 ./training/filter2query.py \
---model mistralai/Mistral-7B-Instruct-v0.3 \
---batch_size 16 \
---filter_csv /opt/gpudata/gdc-eval/results/datasets/naive_sampler_1M_v1_part3.tsv \
---output_dir /opt/gpudata/gdc-eval/results/datasets
-"""
-
-
 import argparse
-import json
-import os
 
 import pandas as pd
-from _utils import _prepare_filter_dataset
-from tqdm import trange
 from vllm import LLM, SamplingParams
 
 DEFAULT_FILTERS_COL = "filters"
-TRAIN_FILTERS_COL = "filters_cleaned"
 
+"""
+python ./training/filter2query.py \
+--model mistralai/Mistral-7B-Instruct-v0.3 \
+--input-tsv /opt/gpudata/gdc-eval/results/datasets/deficit_samples_v2.tsv \
+--output-csv /opt/gpudata/gdc-eval/results/datasets/deficit_samples_v2_queries.tsv
+"""
 
 # Prompt
 example_1 = """
@@ -106,19 +70,12 @@ Sentence:
 """
 
 
-def generate_query_statements(
+def generate_queries(
     *,  # enforce kwargs
     model: str,
-    batch_size: int,
-    filter_csv: str,
-    output_dir: str,
+    input_tsv: str,
+    output_csv: str,
 ):
-    os.makedirs(output_dir, exist_ok=True)
-    model_name = os.path.basename(model)
-    basename = os.path.basename(filter_csv)
-    filename = f"{basename.split('.')[0]}_queries.csv"
-    result_csv = os.path.join(output_dir, filename)
-
     sampling_params = SamplingParams(  # greedy
         n=1,
         temperature=0,
@@ -133,69 +90,37 @@ def generate_query_statements(
         enforce_eager=True,
     )
 
-    filters_df = pd.read_csv(filter_csv, sep="\t")
+    dataset_df = pd.read_csv(input_tsv, sep="\t")
 
-    dataset_df = _prepare_filter_dataset(filters_df, DEFAULT_FILTERS_COL)
+    prompts = [
+        prompt.format(example_1, example_2, x) for x in dataset_df[DEFAULT_FILTERS_COL]
+    ]
 
-    N = len(dataset_df)
-    print(f"Size of the filter dataset : {N}")
-    for lo in trange(0, N, batch_size, desc="Batched Generation"):
-        hi = lo + batch_size
-        if hi > N:
-            hi = N
-
-        batch_filters = []
-        batch_prompts = []
-        for i in range(lo, hi):
-            current_filter = dataset_df.iloc[i][TRAIN_FILTERS_COL]
-            batch_filters.append(str(current_filter))
-            batch_prompts.append(
-                prompt.format(example_1, example_2, str(current_filter))
-            )
-
-        batch_outputs = llm.generate(batch_prompts, sampling_params)
-        batch_outputs = [o.outputs[0].text for o in batch_outputs]
-
-        pd.DataFrame(
-            {
-                "filters": batch_filters,
-                "prompts": batch_prompts,
-                "queries": batch_outputs,
-            }
-        ).to_csv(
-            result_csv,
-            mode="w" if lo == 0 else "a",
-            header=lo == 0,
-            index=False,
-        )
+    outputs = llm.generate(prompts, sampling_params)
+    outputs = [o.outputs[0].text for o in outputs]
+    out_df = pd.DataFrame(
+        {
+            "filters": dataset_df[DEFAULT_FILTERS_COL],
+            "prompts": prompts,
+            "queries": outputs,
+        }
+    )
+    out_df.to_csv(output_csv, index=False)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model", required=True, help="Local or HuggingFace model path/name"
-    )
-    parser.add_argument(
-        "--batch_size", type=int, required=True, help="Batch size for LLM"
-    )
-    parser.add_argument(
-        "--filter_csv", required=True, help="Path to input csv with filter"
-    )
-    parser.add_argument(
-        "--output_dir",
-        required=True,
-        help="Directory to save output generation results",
-    )
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--input-tsv", required=True)
+    parser.add_argument("--output-csv", required=True)
     args = parser.parse_args()
     return args
 
 
 if __name__ == "__main__":
     args = parse_args()
-    print(args)
-    generate_query_statements(
+    generate_queries(
         model=args.model,
-        batch_size=args.batch_size,
-        filter_csv=args.filter_csv,
-        output_dir=args.output_dir,
+        input_tsv=args.input_tsv,
+        output_csv=args.output_csv,
     )
