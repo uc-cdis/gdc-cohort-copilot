@@ -1,9 +1,8 @@
 import argparse
 import os
 
-import pandas as pd
 import torch
-from datasets import load_dataset, load_from_disk
+from datasets import load_dataset
 from peft import LoraConfig, get_peft_model
 from transformers import (
     AutoModelForCausalLM,
