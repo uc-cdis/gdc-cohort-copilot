@@ -3,7 +3,8 @@ import re
 
 import pandas as pd
 import yaml
-from schema import GDCCohortSchema
+
+from schema import GDCCohortSchema  # isort: skip
 
 PAT = re.compile(r'"field": "(.*?)"')
 
