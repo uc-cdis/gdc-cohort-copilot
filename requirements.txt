@@ -25,6 +25,7 @@ torch==2.5.1
 tensorboard==2.17.0
 vllm==0.6.4.post1
 wandb==0.19.7
+flash-attn==2.7.4.post1
 # huggingface
 accelerate==1.1.1
 datasets==3.1.0
