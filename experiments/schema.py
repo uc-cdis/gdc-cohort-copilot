@@ -1,1 +1,0 @@
-/opt/gpudata/anirudh/git-repos/gdc-cohort-pilot/app/schema.py
