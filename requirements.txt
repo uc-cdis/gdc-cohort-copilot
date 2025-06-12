@@ -6,3 +6,5 @@ ipywidgets
 pre-commit
 detect-secrets
 pqdm
+scipy
+statsmodels
