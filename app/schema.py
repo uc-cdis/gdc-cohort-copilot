@@ -19,7 +19,6 @@ class MiddleOp(Enum):
 
 class OuterOp(Enum):
     AND = "and"
-    EQ = "="
 
 
 class InnerStrContent(BaseModel):
