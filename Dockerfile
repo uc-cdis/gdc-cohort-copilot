@@ -12,7 +12,8 @@ RUN sed -i 's/return args_to_key(base, args, kwargs, typed, ignore)/return str(a
 
 # copy app and model files
 ENV PROJ_PATH="/gdc-cohort-pilot"
-COPY app/ $PROJ_PATH/app/
+COPY app/cache-fsm.py $PROJ_PATH/app/cache-fsm.py
+COPY app/schema.py $PROJ_PATH/app/schema.py
 COPY model/ $PROJ_PATH/model/
 
 # set workdir so relative imports in scipts resolve
@@ -22,6 +23,8 @@ ENV IN_CONTAINER_MODEL_PATH="../model"
 # compute outlines cache
 ENV OUTLINES_CACHE_DIR=".outlines-cache"
 RUN python3 cache-fsm.py $IN_CONTAINER_MODEL_PATH
+
+COPY app/ $PROJ_PATH/app
 
 # set entrypoint to wrapper script that launches app and vllm servers in parallel
 ENTRYPOINT ["bash", "docker-run.sh"]
