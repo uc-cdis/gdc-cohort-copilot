@@ -1,7 +1,6 @@
 import argparse
 import hashlib
 import json
-import os
 import random
 
 import numpy as np
@@ -9,6 +8,15 @@ import pandas as pd
 import yaml
 
 from schema import GDCCohortSchema  # isort: skip
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--n-samples", type=int, required=True)
+    parser.add_argument("--field-value-yaml", required=True)
+    parser.add_argument("--output-tsv", required=True)
+    parser.add_argument("--seed", type=int)
+    return parser.parse_args()
 
 
 def make_cohort_json(field_val_dict):
@@ -24,11 +32,22 @@ def make_cohort_json(field_val_dict):
         else:
             final_val = [val]
 
-        content.append({"op": op, "content": {"field": field, "value": final_val}})
-    return {"op": "and", "content": content}
+        content.append(
+            {
+                "op": op,
+                "content": {
+                    "field": field,
+                    "value": final_val,
+                },
+            },
+        )
+    return {
+        "op": "and",
+        "content": content,
+    }
 
 
-def sample_one_nonzero_chisq(df):
+def sample_one_nonzero_chisq(df: float) -> int:
     """
     Draw one sample from chi sqaured dist, round to int, and reject zeros—
     repeat until > 0. This should be iid.
@@ -41,38 +60,36 @@ def sample_one_nonzero_chisq(df):
 
 def generate_unique_cohorts(
     mappings: dict,
-    target_samples: int,
-    special_cases: list[str],
+    n_samples: int,
     special_ranges: dict[str, tuple[int, int]],
     special_ops: list[str],
     df: float = 6.0,
 ):
     """
     Keeps drawing sizes and building cohorts until we have exactly
-    `target_samples` unique, valid filters.
+    `n_samples` unique, valid filters.
     """
     seen_hashes = set()
     cohorts = []
 
-    while len(cohorts) < target_samples:
-        size = sample_one_nonzero_chisq(df)
-        fields = random.sample(list(mappings.keys()), size)
+    while len(cohorts) < n_samples:
+        num_fields = sample_one_nonzero_chisq(df)
+        fields = random.sample(list(mappings.keys()), num_fields)
 
         field_vals = {}
         for field in fields:
             opts = mappings[field]
-            if field in special_cases:
+            if field in special_ranges:
                 lo, hi = special_ranges[field]
                 val = random.randint(lo, hi - 1)
                 op = random.choice(special_ops)
             else:
+                op = "in"
                 if len(opts) > 1:
-                    k = random.randint(1, min(len(opts), 5))
-                    val = random.sample(opts, k)
-                    op = "in"
+                    num_vals = random.randint(1, min(len(opts), 5))
+                    val = random.sample(opts, num_vals)
                 else:
                     val = opts
-                    op = "in"
             field_vals[field] = (op, val)
 
         cohort = make_cohort_json(field_vals)
@@ -94,26 +111,13 @@ def generate_unique_cohorts(
     return cohorts
 
 
-def parse_args():
-    p = argparse.ArgumentParser()
-    p.add_argument("--target_samples", type=int, required=True)
-    p.add_argument("--output_filename", type=str, required=True)
-    return p.parse_args()
+def main(args):
+    if args.seed is not None:
+        random.seed(args.seed)
 
-
-def main():
-    args = parse_args()
-    base = "/opt/gpudata/gdc-cohort-data"
-    with open(os.path.join(base, "fields_short_v2.yaml")) as f:
+    with open(args.field_value_yaml) as f:
         mappings = yaml.safe_load(f)
 
-    special_cases = [
-        "diagnoses.age_at_diagnosis",
-        "diagnoses.year_of_diagnosis",
-        "exposures.cigarettes_per_day",
-        "exposures.pack_years_smoked",
-        "exposures.tobacco_smoking_onset_year",
-    ]
     special_ranges = {
         "diagnoses.age_at_diagnosis": (0, 32850),
         "diagnoses.year_of_diagnosis": (1900, 2050),
@@ -125,17 +129,16 @@ def main():
 
     cohorts = generate_unique_cohorts(
         mappings=mappings,
-        target_samples=args.target_samples,
-        special_cases=special_cases,
+        n_samples=args.n_samples,
         special_ranges=special_ranges,
         special_ops=special_ops,
         df=6.0,
     )
 
-    pd.DataFrame({"filters": [json.dumps(c) for c in cohorts]}).to_csv(
-        args.output_filename, sep="\t", index=False
-    )
+    out = pd.DataFrame({"filters": [json.dumps(c) for c in cohorts]})
+    out.to_csv(args.output_tsv, sep="\t", index=False)
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    main(args)
