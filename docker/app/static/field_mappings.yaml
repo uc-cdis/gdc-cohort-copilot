@@ -1,0 +1,69 @@
+keys :
+  Program: cases.project.program.name
+  Project: cases.project.project_id
+  Disease Type: cases.disease_type
+  Primary Diagnosis: cases.diagnoses.primary_diagnosis
+  Primary Site: cases.primary_site
+  Tissue or Organ of Origin: cases.diagnoses.tissue_or_organ_of_origin
+  Gender : cases.demographic.gender
+  Race : cases.demographic.race
+  Ethnicity: cases.demographic.ethnicity
+  Age at Diagnosis : cases.diagnoses.age_at_diagnosis
+  Vital Status : cases.demographic.vital_status
+  Ajcc Clinical Stage : cases.diagnoses.ajcc_clinical_stage
+  Ajcc Pathologic Stage : cases.diagnoses.ajcc_pathologic_stage
+  Uicc Clinical Stage : cases.diagnoses.uicc_clinical_stage
+  Uicc Pathologic Stage : cases.diagnoses.uicc_pathologic_stage
+  Tumor Grade : cases.diagnoses.tumor_grade
+  Morphology : cases.diagnoses.morphology
+  Year Of Diagnosis : cases.diagnoses.year_of_diagnosis
+  Site Of Resection Or Biopsy: cases.diagnoses.site_of_resection_or_biopsy
+  Sites Of Involvement : cases.diagnoses.sites_of_involvement
+  Laterality : cases.diagnoses.laterality
+  Prior Malignancy : cases.diagnoses.prior_malignancy
+  Prior Treatment : cases.diagnoses.prior_treatment
+  Synchronous Malignancy : cases.diagnoses.synchronous_malignancy
+  Progression Or Recurrence: cases.diagnoses.progression_or_recurrence
+  Residual Disease: cases.diagnoses.residual_disease
+  Child Pugh Classification : cases.diagnoses.child_pugh_classification
+  Ishak Fibrosis Score: cases.diagnoses.ishak_fibrosis_score
+  Ann Arbor Clinical Stage : cases.diagnoses.ann_arbor_clinical_stage
+  Ann Arbor Pathologic Stage : cases.diagnoses.ann_arbor_pathologic_stage
+  Cog Renal Stage : cases.diagnoses.cog_renal_stage
+  Figo Stage : cases.diagnoses.figo_stage
+  Igcccg Stage : cases.diagnoses.igcccg_stage
+  Inss Stage : cases.diagnoses.inss_stage
+  Iss Stage: cases.diagnoses.iss_stage
+  Masaoka Stage : cases.diagnoses.masaoka_stage
+  Inpc Grade : cases.diagnoses.inpc_grade
+  Who Cns Grade : cases.diagnoses.who_cns_grade
+  Cog Neuroblastoma Risk Group : cases.diagnoses.cog_neuroblastoma_risk_group
+  Cog Rhabdomyosarcoma Risk Group : cases.diagnoses.cog_rhabdomyosarcoma_risk_group
+  Eln Risk Classification : cases.diagnoses.eln_risk_classification
+  International Prognostic Index : cases.diagnoses.international_prognostic_index
+  Wilms Tumor Histologic Subtype : cases.diagnoses.wilms_tumor_histologic_subtype
+  Weiss Assessment Score : cases.diagnoses.weiss_assessment_score
+  Best Overall Response : cases.diagnoses.best_overall_response
+  Therapeutic Agents : cases.diagnoses.treatments.therapeutic_agents
+  Treatment Intent Type : cases.diagnoses.treatments.treatment_intent_type
+  Treatment Outcome : cases.diagnoses.treatments.treatment_outcome
+  Treatment Type: cases.diagnoses.treatments.treatment_type
+  Alcohol History : cases.exposures.alcohol_history
+  Alcohol Intensity : cases.exposures.alcohol_intensity
+  Tobacco Smoking Status : cases.exposures.tobacco_smoking_status
+  Cigarettes Per Day : cases.exposures.cigarettes_per_day
+  Pack Years Smoked : cases.exposures.pack_years_smoked
+  Tobacco Smoking Onset Year : cases.exposures.tobacco_smoking_onset_year
+  Tissue Type : cases.samples.tissue_type
+  Biospecimen Anatomic Site : cases.samples.biospecimen_anatomic_site
+  Specimen Type : cases.samples.specimen_type
+  Preservation Method : cases.samples.preservation_method
+  Tumor Descriptor : cases.samples.tumor_descriptor
+  Analyte Type : cases.samples.portions.analytes.aliquots.analyte_type
+  Data Category : files.data_category
+  Data Type : files.data_type
+  Experimental Strategy : files.experimental_strategy
+  Workflow Type : files.analysis.workflow_type
+  Data Format : files.data_format
+  Platform : files.platform
+  Access : files.access

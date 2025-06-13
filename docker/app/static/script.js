@@ -12,6 +12,7 @@ let currentSelections = {
   checkboxes: {},
   ranges: {}
 };
+let latestFilterJson = ""
 let lastNLJson = null;
 let nlModalCollapsed = false;
 
@@ -138,6 +139,21 @@ function buildGdcFilters() {
   return {op: "and", content};
 }
 
+function updateJsonDropdown(json) {
+    latestFilterJson = json; // store latest always
+    // document.getElementById('dropdown-json-content').textContent = JSON.stringify(json, null, 2);
+    document.getElementById('dropdown-json-content').textContent = json; // value vs text contenxt
+  }
+
+function showJsonDropdown() {
+  document.getElementById('filter-json-dropdown').classList.remove('hidden');
+  // Position just below the search bar (optionally adjust style.top)
+}
+
+function hideJsonDropdown() {
+  document.getElementById('filter-json-dropdown').classList.add('hidden');
+}
+
 async function loadAllData() {
   showLoader();
   // 1. Field mappings
@@ -187,6 +203,259 @@ function renderTabs() {
 
 
 
+// function renderUI(currentTab) {
+//   const mainContent = document.getElementById('main-content');
+//   mainContent.innerHTML = '';
+//   const grid = document.createElement('div');
+//   grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+
+//   for (const cardName of tabCards[currentTab]) {
+//     const cardConfig = filterData[currentTab][cardName];
+//     const apiAggKey = stripCasesPrefix(mapping[cardName]);
+//     const card = document.createElement('div');
+//     card.className = 'bg-white p-4 rounded shadow relative';
+//     const header = document.createElement('div');
+//     header.className = 'card-header-band';
+//     header.innerText = cardName;
+//     card.appendChild(header);
+
+//     if (!apiAggKey) {
+//       const dbg = document.createElement('div');
+//       dbg.className = "card-debug";
+//       dbg.innerText = `Not rendered: No mapping for card "${cardName}" in field_mappings.yaml.`;
+//       card.appendChild(dbg);
+//       grid.appendChild(card);
+//       continue;
+//     }
+
+//     // ---- RANGE/RANGE+CHECKBOX CARDS ----
+//     if (
+//       typeof cardConfig === "object" &&
+//       cardConfig !== null &&
+//       !Array.isArray(cardConfig) &&
+//       cardConfig.type
+//     ) {
+//       const rangeRow = document.createElement('div');
+//       rangeRow.className = 'flex space-x-2 items-end mb-2';
+//       const minGroup = document.createElement('div');
+//       minGroup.innerHTML = `<label class="text-xs text-gray-500">${cardConfig.min_label || "Min"}</label>
+//           <input type="number" placeholder="${cardConfig.min_label || "Min"}" class="min-input border rounded w-20 p-1 focus:ring focus:ring-blue-200" min="${cardConfig.min}" max="${cardConfig.max}">`;
+//       rangeRow.appendChild(minGroup);
+//       const dash = document.createElement('span');
+//       dash.className = 'mx-1 text-gray-400';
+//       dash.innerText = '—';
+//       rangeRow.appendChild(dash);
+//       const maxGroup = document.createElement('div');
+//       maxGroup.innerHTML = `<label class="text-xs text-gray-500">${cardConfig.max_label || "Max"} </label>
+//           <input type="number" placeholder="${cardConfig.max_label || "Max"}" class="max-input border rounded w-20 p-1 focus:ring focus:ring-blue-200" min="${cardConfig.min}" max="${cardConfig.max}">`;
+//       rangeRow.appendChild(maxGroup);
+//       if (cardConfig.unit) {
+//         const unitSpan = document.createElement('span');
+//         unitSpan.className = 'ml-2 text-xs text-gray-400';
+//         unitSpan.innerText = cardConfig.unit;
+//         rangeRow.appendChild(unitSpan);
+//       }
+//       card.appendChild(rangeRow);
+
+//       // Add robust range input listeners
+//       const minInput = rangeRow.querySelector('.min-input');
+//       const maxInput = rangeRow.querySelector('.max-input');
+//       [minInput, maxInput].forEach(input =>
+//         input.addEventListener('input', () => {
+//           const minVal = minInput.value;
+//           const maxVal = maxInput.value;
+//           if (minVal || maxVal) {
+//             currentSelections.ranges[apiAggKey] = { min: minVal, max: maxVal };
+//           } else {
+//             delete currentSelections.ranges[apiAggKey];
+//           }
+//           onAnyFilterChange();
+//         })
+//       );
+
+//       if (cardConfig.type === "range+checkboxes" && Array.isArray(cardConfig.popular)) {
+//         const popDiv = document.createElement('div');
+//         popDiv.className = 'popular-range-row flex flex-wrap gap-2 mt-2';
+
+//         let buckets = [];
+//         if (apiAggs[apiAggKey] && apiAggs[apiAggKey].buckets)
+//           buckets = apiAggs[apiAggKey].buckets;
+
+//         const cardKey = `${currentTab}-${cardName}`.replace(/[^a-zA-Z0-9_-]/g, '');
+
+//         cardConfig.popular.forEach((pop, i) => {
+//           let popCount = 0;
+//           let popPct = 0;
+//           if (buckets.length) {
+//             popCount = buckets.filter(
+//               b => b.key !== "_missing" && b.doc_count > 0 &&
+//                 (Number(b.key) >= pop.min && Number(b.key) <= pop.max)
+//             ).reduce((acc, b) => acc + b.doc_count, 0);
+//             const total = buckets.filter(b => b.doc_count > 0 && b.key !== "_missing")
+//                                 .reduce((acc, b) => acc + b.doc_count, 0);
+//             popPct = total ? ((popCount / total) * 100).toFixed(1) : 0;
+//           }
+//           const label = document.createElement('label');
+//           label.className = 'inline-flex items-center px-2 py-1 bg-gray-100 rounded cursor-pointer';
+//           // label.innerHTML = `<input type='checkbox' data-field='${apiAggKey}' class='popular-range mr-2' name='${cardKey}-pop' data-min='${pop.min}' data-max='${pop.max}' id='${cardKey}-pop-${i}'>${pop.label}
+//           label.innerHTML = `<input type='checkbox' data-field='${mapping[cardName]}' class='popular-range mr-2' name='${cardKey}-pop' data-min='${pop.min}' data-max='${pop.max}' id='${cardKey}-pop-${i}'>${pop.label}
+//               <span class="checkbox-count">${popCount ? popCount.toLocaleString() : 0} (${popPct}%)</span>`;
+//           popDiv.appendChild(label);
+//         });
+//         card.appendChild(popDiv);
+
+//         // SYNC logic: listener for popular range checkboxes
+//         const checkboxes = popDiv.querySelectorAll('input[type=checkbox]');
+//         checkboxes.forEach(cb => {
+//           cb.addEventListener('change', () => {
+//             if (cb.checked) {
+//               checkboxes.forEach(other => { if (other !== cb) other.checked = false; });
+//               minInput.value = cb.dataset.min;
+//               maxInput.value = cb.dataset.max;
+//               currentSelections.ranges[apiAggKey] = { min: cb.dataset.min, max: cb.dataset.max };
+//             } else {
+//               if (!minInput.value && !maxInput.value) {
+//                 delete currentSelections.ranges[apiAggKey];
+//               }
+//             }
+//             onAnyFilterChange();
+//           });
+//         });
+//       }
+//       grid.appendChild(card);
+//       continue;
+//     }
+
+//     // ---- STANDARD CHECKBOX CARDS ----
+//     if (
+//       Array.isArray(cardConfig) ||
+//       cardConfig === null ||
+//       (typeof cardConfig === "object" && cardConfig !== null && !cardConfig.type && Object.keys(cardConfig).length === 0)
+//     ) {
+//       let rendered = false;
+//       if (apiAggs[apiAggKey] && apiAggs[apiAggKey].buckets) {
+//         const buckets = apiAggs[apiAggKey].buckets.filter(
+//           b => b.doc_count > 0 && b.key !== "_missing"
+//         ).sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true, sensitivity: 'base' }));
+//         if (buckets.length > 0) {
+//           const total = buckets.reduce((a, b) => a + b.doc_count, 0);
+//           buckets.slice(0, 6).forEach(bucket => {
+//             const pct = ((bucket.doc_count / total) * 100).toFixed(1);
+//             const row = document.createElement('div');
+//             row.className = "checkbox-row";
+//             // row.innerHTML = `
+//             //   <label class="flex items-center checkbox-label">
+//             //     <input type="checkbox" data-field="${apiAggKey}" data-value="${bucket.key}" class="mr-2">
+//             //     ${bucket.key}
+//             //   </label>
+//             //   <span class="checkbox-count">${bucket.doc_count.toLocaleString()} (${pct}%)</span>
+//             // `;
+//             row.innerHTML = `
+//               <label class="flex items-center checkbox-label">
+//                 <input type="checkbox" data-field="${mapping[cardName]}" data-value="${bucket.key}" class="mr-2">
+//                 ${bucket.key}
+//               </label>
+//               <span class="checkbox-count">${bucket.doc_count.toLocaleString()} (${pct}%)</span>
+//             `;
+//             card.appendChild(row);
+//             const input = row.querySelector('input[type=checkbox]');
+//             // Restore checked state
+//             if (
+//               currentSelections.checkboxes[apiAggKey] &&
+//               currentSelections.checkboxes[apiAggKey].has(bucket.key)
+//             ) {
+//               input.checked = true;
+//             }
+//             // Robust state: update only that field/value!
+//             input.addEventListener('change', () => {
+//               if (!currentSelections.checkboxes[apiAggKey]) currentSelections.checkboxes[apiAggKey] = new Set();
+//               if (input.checked) {
+//                 currentSelections.checkboxes[apiAggKey].add(bucket.key);
+//               } else {
+//                 currentSelections.checkboxes[apiAggKey].delete(bucket.key);
+//                 if (currentSelections.checkboxes[apiAggKey].size === 0) delete currentSelections.checkboxes[apiAggKey];
+//               }
+//               onAnyFilterChange();
+//             });
+//           });
+//           if (buckets.length > 6) {
+//             const id = `${cardName.replace(/[^a-zA-Z0-9_-]/g, '')}-more`;
+//             const extraDiv = document.createElement('div');
+//             extraDiv.id = id;
+//             extraDiv.className = 'hidden';
+//             buckets.slice(6).forEach(bucket => {
+//               const pct = ((bucket.doc_count / total) * 100).toFixed(1);
+//               const row = document.createElement('div');
+//               row.className = "checkbox-row";
+//               // row.innerHTML = `
+//               //   <label class="flex items-center checkbox-label">
+//               //     <input type="checkbox" data-field="${apiAggKey}" data-value="${bucket.key}" class="mr-2">
+//               //     ${bucket.key}
+//               //   </label>
+//               //   <span class="checkbox-count">${bucket.doc_count.toLocaleString()} (${pct}%)</span>
+//               // `;
+//               row.innerHTML = `
+//                 <label class="flex items-center checkbox-label">
+//                   <input type="checkbox" data-field="${mapping[cardName]}" data-value="${bucket.key}" class="mr-2">
+//                   ${bucket.key}
+//                 </label>
+//                 <span class="checkbox-count">${bucket.doc_count.toLocaleString()} (${pct}%)</span>
+//               `;
+//               extraDiv.appendChild(row);
+//               const input = row.querySelector('input[type=checkbox]');
+//               if (
+//                 currentSelections.checkboxes[apiAggKey] &&
+//                 currentSelections.checkboxes[apiAggKey].has(bucket.key)
+//               ) {
+//                 input.checked = true;
+//               }
+//               input.addEventListener('change', () => {
+//                 if (!currentSelections.checkboxes[apiAggKey]) currentSelections.checkboxes[apiAggKey] = new Set();
+//                 if (input.checked) {
+//                   currentSelections.checkboxes[apiAggKey].add(bucket.key);
+//                 } else {
+//                   currentSelections.checkboxes[apiAggKey].delete(bucket.key);
+//                   if (currentSelections.checkboxes[apiAggKey].size === 0) delete currentSelections.checkboxes[apiAggKey];
+//                 }
+//                 onAnyFilterChange();
+//               });
+//             });
+//             card.appendChild(extraDiv);
+//             const toggle = document.createElement('button');
+//             toggle.className = 'text-blue-600 text-sm mt-2';
+//             toggle.innerText = 'Show more';
+//             toggle.onclick = () => {
+//               extraDiv.classList.toggle('hidden');
+//               toggle.innerText = extraDiv.classList.contains('hidden') ? 'Show more' : 'Show less';
+//             };
+//             card.appendChild(toggle);
+//           }
+//           rendered = true;
+//         }
+//       }
+//       if (!rendered) {
+//         const placeholder = document.createElement('div');
+//         placeholder.className = 'card-placeholder';
+//         placeholder.innerText = `No data for "${apiAggKey}" in API counts, or all counts are zero.`;
+//         card.appendChild(placeholder);
+//       }
+//       grid.appendChild(card);
+//       continue;
+//     }
+
+//     const placeholder = document.createElement('div');
+//     placeholder.className = 'card-placeholder';
+//     placeholder.innerText = 'Unknown card config; not rendered.';
+//     card.appendChild(placeholder);
+//     grid.appendChild(card);
+//   }
+//   mainContent.appendChild(grid);
+//   restoreSelectionsToUI(mainContent);
+// }
+
+
+// new june-13: 11:40 PM
+
 function renderUI(currentTab) {
   const mainContent = document.getElementById('main-content');
   mainContent.innerHTML = '';
@@ -195,7 +464,8 @@ function renderUI(currentTab) {
 
   for (const cardName of tabCards[currentTab]) {
     const cardConfig = filterData[currentTab][cardName];
-    const apiAggKey = stripCasesPrefix(mapping[cardName]);
+    const mappingKey = mapping[cardName]; // always full, with "cases."
+    const apiAggKey = stripCasesPrefix(mappingKey);
     const card = document.createElement('div');
     card.className = 'bg-white p-4 rounded shadow relative';
     const header = document.createElement('div');
@@ -249,9 +519,9 @@ function renderUI(currentTab) {
           const minVal = minInput.value;
           const maxVal = maxInput.value;
           if (minVal || maxVal) {
-            currentSelections.ranges[apiAggKey] = { min: minVal, max: maxVal };
+            currentSelections.ranges[mappingKey] = { min: minVal, max: maxVal };
           } else {
-            delete currentSelections.ranges[apiAggKey];
+            delete currentSelections.ranges[mappingKey];
           }
           onAnyFilterChange();
         })
@@ -281,7 +551,7 @@ function renderUI(currentTab) {
           }
           const label = document.createElement('label');
           label.className = 'inline-flex items-center px-2 py-1 bg-gray-100 rounded cursor-pointer';
-          label.innerHTML = `<input type='checkbox' data-field='${apiAggKey}' class='popular-range mr-2' name='${cardKey}-pop' data-min='${pop.min}' data-max='${pop.max}' id='${cardKey}-pop-${i}'>${pop.label}
+          label.innerHTML = `<input type='checkbox' data-field='${mappingKey}' class='popular-range mr-2' name='${cardKey}-pop' data-min='${pop.min}' data-max='${pop.max}' id='${cardKey}-pop-${i}'>${pop.label}
               <span class="checkbox-count">${popCount ? popCount.toLocaleString() : 0} (${popPct}%)</span>`;
           popDiv.appendChild(label);
         });
@@ -295,10 +565,10 @@ function renderUI(currentTab) {
               checkboxes.forEach(other => { if (other !== cb) other.checked = false; });
               minInput.value = cb.dataset.min;
               maxInput.value = cb.dataset.max;
-              currentSelections.ranges[apiAggKey] = { min: cb.dataset.min, max: cb.dataset.max };
+              currentSelections.ranges[mappingKey] = { min: cb.dataset.min, max: cb.dataset.max };
             } else {
               if (!minInput.value && !maxInput.value) {
-                delete currentSelections.ranges[apiAggKey];
+                delete currentSelections.ranges[mappingKey];
               }
             }
             onAnyFilterChange();
@@ -328,7 +598,7 @@ function renderUI(currentTab) {
             row.className = "checkbox-row";
             row.innerHTML = `
               <label class="flex items-center checkbox-label">
-                <input type="checkbox" data-field="${apiAggKey}" data-value="${bucket.key}" class="mr-2">
+                <input type="checkbox" data-field="${mappingKey}" data-value="${bucket.key}" class="mr-2">
                 ${bucket.key}
               </label>
               <span class="checkbox-count">${bucket.doc_count.toLocaleString()} (${pct}%)</span>
@@ -337,19 +607,19 @@ function renderUI(currentTab) {
             const input = row.querySelector('input[type=checkbox]');
             // Restore checked state
             if (
-              currentSelections.checkboxes[apiAggKey] &&
-              currentSelections.checkboxes[apiAggKey].has(bucket.key)
+              currentSelections.checkboxes[mappingKey] &&
+              currentSelections.checkboxes[mappingKey].has(bucket.key)
             ) {
               input.checked = true;
             }
             // Robust state: update only that field/value!
             input.addEventListener('change', () => {
-              if (!currentSelections.checkboxes[apiAggKey]) currentSelections.checkboxes[apiAggKey] = new Set();
+              if (!currentSelections.checkboxes[mappingKey]) currentSelections.checkboxes[mappingKey] = new Set();
               if (input.checked) {
-                currentSelections.checkboxes[apiAggKey].add(bucket.key);
+                currentSelections.checkboxes[mappingKey].add(bucket.key);
               } else {
-                currentSelections.checkboxes[apiAggKey].delete(bucket.key);
-                if (currentSelections.checkboxes[apiAggKey].size === 0) delete currentSelections.checkboxes[apiAggKey];
+                currentSelections.checkboxes[mappingKey].delete(bucket.key);
+                if (currentSelections.checkboxes[mappingKey].size === 0) delete currentSelections.checkboxes[mappingKey];
               }
               onAnyFilterChange();
             });
@@ -365,7 +635,7 @@ function renderUI(currentTab) {
               row.className = "checkbox-row";
               row.innerHTML = `
                 <label class="flex items-center checkbox-label">
-                  <input type="checkbox" data-field="${apiAggKey}" data-value="${bucket.key}" class="mr-2">
+                  <input type="checkbox" data-field="${mappingKey}" data-value="${bucket.key}" class="mr-2">
                   ${bucket.key}
                 </label>
                 <span class="checkbox-count">${bucket.doc_count.toLocaleString()} (${pct}%)</span>
@@ -373,18 +643,18 @@ function renderUI(currentTab) {
               extraDiv.appendChild(row);
               const input = row.querySelector('input[type=checkbox]');
               if (
-                currentSelections.checkboxes[apiAggKey] &&
-                currentSelections.checkboxes[apiAggKey].has(bucket.key)
+                currentSelections.checkboxes[mappingKey] &&
+                currentSelections.checkboxes[mappingKey].has(bucket.key)
               ) {
                 input.checked = true;
               }
               input.addEventListener('change', () => {
-                if (!currentSelections.checkboxes[apiAggKey]) currentSelections.checkboxes[apiAggKey] = new Set();
+                if (!currentSelections.checkboxes[mappingKey]) currentSelections.checkboxes[mappingKey] = new Set();
                 if (input.checked) {
-                  currentSelections.checkboxes[apiAggKey].add(bucket.key);
+                  currentSelections.checkboxes[mappingKey].add(bucket.key);
                 } else {
-                  currentSelections.checkboxes[apiAggKey].delete(bucket.key);
-                  if (currentSelections.checkboxes[apiAggKey].size === 0) delete currentSelections.checkboxes[apiAggKey];
+                  currentSelections.checkboxes[mappingKey].delete(bucket.key);
+                  if (currentSelections.checkboxes[mappingKey].size === 0) delete currentSelections.checkboxes[mappingKey];
                 }
                 onAnyFilterChange();
               });
@@ -423,9 +693,11 @@ function renderUI(currentTab) {
 }
 
 
+
 async function onAnyFilterChange() {
   showLoader();
   const filters = buildGdcFilters();
+  updateJsonDropdown(JSON.stringify(filters, null, 4)); // live updates to the dropdown json
   try {
     const apiJson = await fetchApiCounts(filters);
     apiAggs = apiJson.data.aggregations;
@@ -443,6 +715,8 @@ async function onAnyFilterChange() {
 
 function handleResetFilters() {
   showLoader();
+  document.getElementById('search-bar').value = '';
+  updateJsonDropdown({});
   currentSelections = { checkboxes: {}, ranges: {} };
   fetchApiCounts().then(apiJson => {
     apiAggs = apiJson.data.aggregations;
@@ -455,6 +729,7 @@ function handleResetFilters() {
       if (idx === 0) btn.classList.add('bg-blue-100', 'text-blue-600');
       else btn.classList.add('text-gray-700');
     });
+    latestFilterJson = "";
   }).finally(hideLoader);
 }
 
@@ -467,6 +742,7 @@ function handleSearch(event) {
 
 function applyFilterJsonToUI(filterJson) {
   currentSelections = { checkboxes: {}, ranges: {} };
+  filterJson = JSON.parse(filterJson)
   if (!filterJson || !filterJson.content) return;
   (filterJson.content || []).forEach(clause => {
     if (clause.op === "in" && clause.content?.field && clause.content?.value) {
@@ -504,47 +780,29 @@ window.addEventListener('DOMContentLoaded', () => {
       const resp = await fetch(BACKEND_NL_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({query})
+        body: JSON.stringify({text: query})
       });
       if (!resp.ok) throw new Error("Backend error.");
       const result = await resp.json();
       // Accept result.cohort or result.filter_json, fallback to whole result
       let json = result.cohort || result.filter_json || result;
+      console.log('search result output type:', typeof json)
       latestFilterJson = json; // Update global var for dropdown
-      updateJsonDropdown(json);
+      updateJsonDropdown(latestFilterJson);
       showJsonDropdown();
-      // showJsonModal(result.filter_json || result);
     } catch (e) {
       alert("Failed to parse query. " + e.message);
     } finally {
-      hideloader && hideLoader();
+      hideLoader();
     }
   });
-
-  // document.getElementById('close-json-modal').addEventListener('click', hideJsonModal);
-  // document.getElementById('copy-json-btn').addEventListener('click', () => {
-  //   const txt = document.getElementById('nl-json-content').textContent;
-  //   navigator.clipboard.writeText(txt).then(() => {
-  //     document.getElementById('copy-json-btn').textContent = "Copied!";
-  //     setTimeout(() => document.getElementById('copy-json-btn').textContent = "Copy to Clipboard", 1000);
-  //   });
-  // });
-  // 'populate-cohort-btn' click is now attached inside showJsonModal()
-
-  // document.getElementById('nl-json-modal').addEventListener('click', e => {
-  //   if (e.target === document.getElementById('nl-json-modal') && !nlModalCollapsed)
-  //     hideJsonModal();
-  // });
-  // document.addEventListener('keydown', e => {
-  //   if (e.key === "Escape" && nlModalCollapsed) reopenJsonModal();
-  // });
 
   document.getElementById('show-json-btn').addEventListener('click', () => {
     console.log('Show Filter JSON button clicked!');
   });
 
   document.getElementById('download-json').addEventListener('click', function(){
-    const currentFilter = buildGdcFilters ? buildGdcFilters() : null;
+    const currentFilter = latestFilterJson ? buildGdcFilters() : null;
     let jsonStr = "";
     if (currentFilter && Object.keys(currentFilter).length > 0) {
       jsonStr = JSON.stringify(currentFilter, null, 2);
@@ -553,7 +811,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const blob = new Blob([jsonStr], {type: "text/plain"});
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "gdc_filter.json.txt";
+    link.download = "cohort_filter.txt";
     document.body.appendChild(link);
     link.click();
     setTimeout(() => {
@@ -569,10 +827,11 @@ window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams();
       params.set('fields', 'case_id');
       params.set('format', 'TSV');
+      params.set('size', 45087 )
       if (Object.keys(filters).length > 0) params.set('filters', JSON.stringify(filters));
       const url = `${GDC_API_URL}?${params.toString()}`;
       const resp = await fetch(url);
-      if (!resp.ok) throw new Error("Failed to fetch CSV.");
+      if (!resp.ok) throw new Error("Failed to fetch TSV.");
       const blob = await resp.blob();
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -587,29 +846,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Dummy JSON for startup
-  let latestFilterJson = {
-    "op": "and",
-    "content": [
-      { "op": "in", "content": { "field": "cases.project.program.name", "value": ["FM"] } },
-      { "op": "in", "content": { "field": "cases.disease_type", "value": ["adenomas and adenocarcinomas"] } }
-    ]
-  };
-
-  function updateJsonDropdown(json) {
-    latestFilterJson = json; // store latest always
-    document.getElementById('dropdown-json-content').textContent = JSON.stringify(json, null, 2);
-  }
-
-  function showJsonDropdown() {
-    document.getElementById('filter-json-dropdown').classList.remove('hidden');
-    // Position just below the search bar (optionally adjust style.top)
-  }
-
-  function hideJsonDropdown() {
-    document.getElementById('filter-json-dropdown').classList.add('hidden');
-  }
-
+  
   // Button: open dropdown
   document.getElementById('show-json-btn').addEventListener('click', () => {
     updateJsonDropdown(latestFilterJson);
@@ -644,6 +881,4 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Show the JSON modal with dummy data on first load for testing
-  // showJsonModal(DUMMY_JSON);
 });
