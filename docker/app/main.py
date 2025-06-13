@@ -62,7 +62,7 @@ async def generate_cohort(query: Query) -> Response:
         )
     cohort_filter = completion.choices[0].text
     filter_instance = GDCCohortSchema.model_validate_json(cohort_filter)
-    formatted_filter = filter_instance.model_dump_json(indent=2)
+    formatted_filter = filter_instance.model_dump_json(indent=4)
 
     return Response(cohort=formatted_filter)
 

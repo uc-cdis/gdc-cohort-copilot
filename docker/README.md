@@ -1,6 +1,9 @@
 # Containerization
 
-Build the docker image using the following command:
+Build the docker image **from the repo root** using the following command (don't forget the trailing `.`):
 ```bash
-docker build -t quay.io/cdis/gdc-cohort-pilot:latest --build-arg model=/path/to/model .
+docker build \
+--tag quay.io/cdis/gdc-cohort-pilot:latest \
+--build-context model=/path/to/model \
+--file docker/Dockerfile .
 ```
