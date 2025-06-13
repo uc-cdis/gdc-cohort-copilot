@@ -40,3 +40,13 @@ In addition to the containerized application, we also include our source code fo
   year={2025}
 }
 ```
+
+## TODO
+
+* Remove `cases.` from `files.` properties:
+    * Regenerate synthetic data
+    * Retrain models
+    * Re-evaluate models
+    * Update paper
+    * Remove hotfix from app
+    * Update docker image
