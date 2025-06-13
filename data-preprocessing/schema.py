@@ -1,1 +1,1 @@
-../app/schema.py
+../utils/schema.py

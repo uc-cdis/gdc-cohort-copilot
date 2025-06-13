@@ -10,11 +10,11 @@ RUN pip install fastapi[standard]
     # https://github.com/dottxt-ai/outlines/issues/1130
 RUN sed -i 's/return args_to_key(base, args, kwargs, typed, ignore)/return str(args_to_key(base, args, kwargs, typed, ignore))/' /usr/local/lib/python3.12/dist-packages/outlines/caching.py
 
-# copy app and model files
+# copy model and util files
 ENV PROJ_PATH="/gdc-cohort-pilot"
-COPY app/cache-fsm.py $PROJ_PATH/app/cache-fsm.py
-COPY app/schema.py $PROJ_PATH/app/schema.py
-COPY model/ $PROJ_PATH/model/
+COPY utils/cache-fsm.py $PROJ_PATH/app/cache-fsm.py
+COPY utils/schema.py $PROJ_PATH/app/schema.py
+COPY --from=model . $PROJ_PATH/model
 
 # set workdir so relative imports in scipts resolve
 WORKDIR $PROJ_PATH/app
@@ -24,7 +24,8 @@ ENV IN_CONTAINER_MODEL_PATH="../model"
 ENV OUTLINES_CACHE_DIR=".outlines-cache"
 RUN python3 cache-fsm.py $IN_CONTAINER_MODEL_PATH
 
-COPY app/ $PROJ_PATH/app
+# copy app - separating this allows faster rebuild for developing frontend
+COPY docker/app $PROJ_PATH/app
 
 # set entrypoint to wrapper script that launches app and vllm servers in parallel
-ENTRYPOINT ["bash", "docker-run.sh"]
+ENTRYPOINT ["bash", "run.sh"]
