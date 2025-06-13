@@ -3,20 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GDC Co(hort)-Pilot</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>GDC Co(hort) Pilot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body>
-  <div class="container">
-    <h1>GDC Co(hort)-Pilot</h1>
-    <textarea id="inputText" placeholder="Enter description of cohort here..."></textarea>
-    <button id="submitBtn">
-      <span class="text">Get Cohort</span>
-      <div class="spinner"></div>
-    </button>
-    <textarea id="outputText" placeholder="" readonly></textarea>
+<body class="bg-gray-100 text-gray-800">
+  <div class="flex h-screen">
+    <aside id="sidebar-tabs" class="w-60 bg-white shadow-md p-4 space-y-2"></aside>
+    <main class="flex-1 p-6 overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">GDC Co(hort) Pilot</h1>
+        <div class="flex-gap-2">
+          <button id="reset-filters" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Reset Filters</button>
+          <button id="download-tsv" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">Download-csv</button>
+          <button id="download-json" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Download Filter JSON</button>
+        </div>
+      </div>
+      <!-- Main Search Bar -->
+      <div class="mb-6 flex items-center gap-2 relative">
+        <input type="text" id="search-bar" placeholder="Search with a sentence (e.g. all lung cancer patients)..." class="w-full p-3 border rounded shadow-sm"/>
+        <button id="show-json-btn" class="bg-gray-100 text-gray-700 px-2 py-2 rounded hover:bg-gray-200 border border-gray-300" title="Show Filter JSON">
+          <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <button id="nl-submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+      </div>
+      <div id="case-count-bar" class="mb-4 text-lg font-semibold text-gray-800 flex items-center gap-2"></div>
+      <!-- Dropdown w/ Search Bar -->
+      <div id="filter-json-dropdown" class="hidden absolute left-0 right-0 mx-auto max-w-xl bg-white shadow-lg rounded border z-30" style="top:74px;">
+        <div class="flex justify-between items-center border-b px-4 py-2">
+          <span class="font-semibold">Current Filter JSON</span>
+          <button id="close-json-dropdown" class="text-gray-500 hover:text-gray-800 text-xl">&times;</button>
+        </div>
+        <pre class="overflow-auto max-h-64 px-4 py-2 bg-gray-50 text-xs" id="dropdown-json-content">{}</pre>
+        <div class="flex justify-end space-x-2 px-4 py-2 border-t">
+          <button id="copy-json-btn" class="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200 text-xs">Copy to Clipboard</button>
+          <button id="populate-cohort-btn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">Populate Cohort Builder</button>
+        </div>
+      </div>
+      <div id="main-content"></div>
+    </main>
   </div>
-
-  <script src="script.js"></script>
 </body>
+<script src="script.js"></script>
 </html>
