@@ -117,7 +117,7 @@ def get_gpt2_trainer(args, dataset):
             max_length=args.max_seq_length,
             return_tensors="pt",
         )
-        inputs["labels"] = inputs["input_ids"].copy()
+        inputs["labels"] = inputs["input_ids"].clone()
         return inputs
 
     tok_dataset = dataset.map(
@@ -169,7 +169,7 @@ def get_bart_trainer(args, dataset):
             max_length=args.max_seq_length,
             return_tensors="pt",
         )
-        inputs["labels"] = targets["input_ids"].copy()
+        inputs["labels"] = targets["input_ids"].clone()
         return inputs
 
     tok_dataset = dataset.map(

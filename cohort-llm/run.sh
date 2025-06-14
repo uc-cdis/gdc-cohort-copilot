@@ -89,10 +89,10 @@ python 1-train.py \
 --input-csv $DATA_DIR/train_synthetic_users+1M.csv \
 --log-dir $DATA_DIR/logs/gpt2-1m \
 --output-dir $DATA_DIR/models/gpt2-1m \
---batch_size 32 \
---max_epochs 10 \
+--batch-size 32 \
+--max-epochs 10 \
 --lr 5e-5 \
---max_seq_length 1024
+--max-seq-length 1024
 
 echo "Inferencing GPT2-1M"
 python 2-generate.py \
