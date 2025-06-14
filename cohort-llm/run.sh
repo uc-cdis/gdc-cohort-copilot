@@ -67,7 +67,7 @@ python 2-generate.py \
 echo "Training GPT2-100k"
 python 1-train.py \
 --model openai-community/gpt2 \
---input-csv $DATA_DIR/train_synthetic_users+100k.csv \
+--input-csv $DATA_DIR/train_synthetic_100k+users.csv \
 --log-dir $DATA_DIR/logs/gpt2-100k \
 --output-dir $DATA_DIR/models/gpt2-100k \
 --batch-size 32 \
@@ -86,7 +86,7 @@ python 2-generate.py \
 echo "Training GPT2-1M"
 python 1-train.py \
 --model openai-community/gpt2 \
---input-csv $DATA_DIR/train_synthetic_users+1M.csv \
+--input-csv $DATA_DIR/train_synthetic_1M+users.csv \
 --log-dir $DATA_DIR/logs/gpt2-1m \
 --output-dir $DATA_DIR/models/gpt2-1m \
 --batch-size 32 \
