@@ -79,7 +79,7 @@ echo "Inferencing GPT2-100k"
 python 2-generate.py \
 --model $DATA_DIR/models/gpt2-100k \
 --input-csv $DATA_DIR/test.csv \
---output-csv $DATA_DIR/generations/gpt2-100ktest-generations.csv
+--output-csv $DATA_DIR/generations/gpt2-100k-test-generations.csv
 
 ################################################################################
 
