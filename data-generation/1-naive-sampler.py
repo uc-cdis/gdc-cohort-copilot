@@ -119,11 +119,11 @@ def main(args):
         mappings = yaml.safe_load(f)
 
     special_ranges = {
-        "diagnoses.age_at_diagnosis": (0, 32850),
-        "diagnoses.year_of_diagnosis": (1900, 2050),
-        "exposures.cigarettes_per_day": (0, 999999),
-        "exposures.pack_years_smoked": (0, 999999),
-        "exposures.tobacco_smoking_onset_year": (1900, 2050),
+        "cases.diagnoses.age_at_diagnosis": (0, 32850),
+        "cases.diagnoses.year_of_diagnosis": (1900, 2050),
+        "cases.exposures.cigarettes_per_day": (0, 999999),
+        "cases.exposures.pack_years_smoked": (0, 999999),
+        "cases.exposures.tobacco_smoking_onset_year": (1900, 2050),
     }
     special_ops = [">=", ">", "<", "<="]
 

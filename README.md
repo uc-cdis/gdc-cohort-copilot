@@ -1,6 +1,6 @@
 # GDC Co(hort)-Pilot
 
-We recommend using `docker` to run **GDC Co(hort)-Pilot**. Run the command below before opening http://localhost:8000 in a web browser:
+We recommend using `docker` to run **GDC-Cohort-Pilot**. Run the command below before opening http://localhost:8000 in a web browser:
 ```bash
 docker run -it --rm -p 8000:8000 --runtime nvidia --gpus all quay.io/cdis/gdc-cohort-pilot:latest
 ```
@@ -40,3 +40,13 @@ In addition to the containerized application, we also include our source code fo
   year={2025}
 }
 ```
+
+## TODO
+
+* Remove `cases.` from `files.` properties:
+    * Regenerate synthetic data
+    * Retrain models
+    * Re-evaluate models
+    * Update paper
+    * Remove hotfix from app
+    * Update docker image
