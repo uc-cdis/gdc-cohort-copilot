@@ -2,7 +2,7 @@
 
 DATA_DIR=/opt/gpudata/gdc-cohort-data
 RAW_COHORTS=$DATA_DIR/cohorts_2024-10-25.tsv
-REPO_ROOT=/opt/gpudata/steven/gdc-cohort-pilot
+REPO_ROOT=/opt/gpudata/steven/gdc-cohort-copilot
 
 set -e  # Exit immediately if a command exits with a non-zero status
 

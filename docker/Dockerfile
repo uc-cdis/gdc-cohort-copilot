@@ -11,7 +11,7 @@ RUN pip install fastapi[standard]
 RUN sed -i 's/return args_to_key(base, args, kwargs, typed, ignore)/return str(args_to_key(base, args, kwargs, typed, ignore))/' /usr/local/lib/python3.12/dist-packages/outlines/caching.py
 
 # copy model and util files
-ENV PROJ_PATH="/gdc-cohort-pilot"
+ENV PROJ_PATH="/gdc-cohort-copilot"
 COPY utils/cache-fsm.py $PROJ_PATH/app/cache-fsm.py
 COPY utils/schema.py $PROJ_PATH/app/schema.py
 COPY --from=model . $PROJ_PATH/model

@@ -37,7 +37,7 @@ def main(args):
     if args.adapter is not None:
         enable_lora = True
         lora_request = LoRARequest(
-            lora_name="gdc-cohort-pilot",
+            lora_name="gdc-cohort-copilot",
             lora_int_id=1,
             lora_path=args.adapter,
         )
