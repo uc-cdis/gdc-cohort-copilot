@@ -1,8 +1,8 @@
-# GDC Co(hort)-Pilot
+# GDC Cohort Copilot
 
-We recommend using `docker` to run **GDC-Cohort-Pilot**. Run the command below before opening http://localhost:8000 in a web browser:
+We recommend using `docker` to run **GDC Cohort Copilot**. Run the command below before opening http://localhost:8000 in a web browser:
 ```bash
-docker run -it --rm -p 8000:8000 --runtime nvidia --gpus all quay.io/cdis/gdc-cohort-pilot:latest
+docker run -it --rm -p 8000:8000 --runtime nvidia --gpus all quay.io/cdis/gdc-cohort-copilot:latest
 ```
 
 * Our image requires GPU acceleration to run:
@@ -17,7 +17,7 @@ docker run -it --rm -p 8000:8000 --runtime nvidia --gpus all quay.io/cdis/gdc-co
 
 ## Cohort-LLM
 
-In addition to the containerized application, we also include our source code for developing and evaluating **Cohort-LLM**, the generative language model powering the GDC-Cohort-Pilot. In order, the steps for our experiments are:
+In addition to the containerized application, we also include our source code for developing and evaluating **Cohort-LLM**, the generative language model powering the GDC Cohort Copilot. In order, the steps for our experiments are:
 1. Setup and activate development environment
     ```
     conda env create -f env.yaml
@@ -34,19 +34,9 @@ In addition to the containerized application, we also include our source code fo
 
 ```
 @article{song2025gdc,
-  title={GDC-Cohort-Pilot: An AI Copilot for Curating Cohorts from the Genomic Data Commons},
+  title={GDC Cohort Copilot: An AI Copilot for Curating Cohorts from the Genomic Data Commons},
   author={Song, Steven and Subramanyam, Anirudh and Zhang, Zhenyu and Venkat, Aarti and Grossman, Robert L},
   journal={TODO},
   year={2025}
 }
 ```
-
-## TODO
-
-* Remove `cases.` from `files.` properties:
-    * Regenerate synthetic data
-    * Retrain models
-    * Re-evaluate models
-    * Update paper
-    * Remove hotfix from app
-    * Update docker image
