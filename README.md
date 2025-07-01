@@ -36,7 +36,9 @@ Overview of GDC Cohort Copilot implementation and user workflow:
 
 ## Cohort-LLM
 
-In addition to the containerized application, we also include our source code for developing and evaluating **Cohort-LLM**, the generative language model powering the GDC Cohort Copilot. In order, the steps for our experiments are:
+In addition to the containerized application, we also include our source code for developing and evaluating **Cohort-LLM**, the generative language model powering the GDC Cohort Copilot. We share all experimental variants of Cohort-LLM on huggingface: [https://huggingface.co/uc-ctds](https://huggingface.co/uc-ctds).
+
+In order, the steps for our experiments are:
 1. Setup and activate development environment
     ```
     conda env create -f env.yaml
