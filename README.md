@@ -31,7 +31,7 @@ Overview of GDC Cohort Copilot implementation and user workflow:
     <li>Generation of the corresponding cohort filter by Cohort-LLM</li>
     <li>Iterative and interactive refinement of the cohort by the user</li>
     <li>Outputting the curated cohort to the NCI GDC</li>
-  </ul>
+  </ol>
 </ol>
 
 ## Cohort-LLM
