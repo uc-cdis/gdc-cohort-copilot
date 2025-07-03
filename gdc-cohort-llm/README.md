@@ -1,6 +1,6 @@
-# Cohort-LLM
+# GDC Cohort LLM
 
-We experiment with multiple variations of model and data mixture for training Cohort-LLM. After training, we inference the trained models to evaluate their generations. Our `run.sh` script executes all of our experimental variations; an example workflow is as follows:
+We experiment with multiple variations of model and data mixture for training GDC Cohort LLM. After training, we inference the trained models to evaluate their generations. Our `run.sh` script executes all of our experimental variations; an example workflow is as follows:
 
 ### Train model
 ```bash
