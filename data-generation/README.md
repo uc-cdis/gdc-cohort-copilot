@@ -1,6 +1,6 @@
 # Synthetic Data Generation
 
-We utilize synthetic data in our development of Cohort-LLM. While more advanced potential generation methods exist, we utilize naive random sampling. Specifically, we only consider fields and values defined in our core set of filter properties. We sample cohort filter JSONs and rely on our existing filter-to-query reverse translation utilities to complete our synthetic data generation.
+We utilize synthetic data in our development of GDC Cohort LLM. While more advanced potential generation methods exist, we utilize naive random sampling. Specifically, we only consider fields and values defined in our core set of filter properties. We sample cohort filter JSONs and rely on our existing filter-to-query reverse translation utilities to complete our synthetic data generation.
 
 ### Naive Sampling
 
