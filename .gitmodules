@@ -1,0 +1,3 @@
+[submodule "hf-space"]
+	path = hf-space
+	url = git@hf.co:spaces/labadvcomp/GDC-Cohort-Copilot
