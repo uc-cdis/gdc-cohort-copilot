@@ -1,6 +1,6 @@
 # GDC Cohort Copilot
 
-**GDC Cohort Copilot** is an AI copilot tool to assist in the curation of cohorts from the NCI GDC using natural language. We share GDC Cohort Copilot as a containerized Gradio app on HuggingFace Spaces available at: [https://huggingface.co/spaces/uc-ctds/GDC-Cohort-Copilot](https://huggingface.co/spaces/uc-ctds/GDC-Cohort-Copilot).
+**GDC Cohort Copilot** is an AI copilot tool to assist in the curation of cohorts from the NCI GDC using natural language. We share GDC Cohort Copilot as a containerized Gradio app (also enabled as an MCP tool!) on HuggingFace Spaces available at: [https://huggingface.co/spaces/uc-ctds/GDC-Cohort-Copilot](https://huggingface.co/spaces/uc-ctds/GDC-Cohort-Copilot).
 
 The implementation of the web app can be found in the git submodule at: [`app`](https://huggingface.co/spaces/uc-ctds/GDC-Cohort-Copilot/tree/main) (links to HuggingFace repo).
 
