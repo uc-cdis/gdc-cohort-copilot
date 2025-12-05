@@ -67,7 +67,9 @@ In order, the steps for our experiments are:
 @article{song2025gdc,
   title={GDC Cohort Copilot: An AI Copilot for Curating Cohorts from the Genomic Data Commons},
   author={Song, Steven and Subramanyam, Anirudh and Zhang, Zhenyu and Venkat, Aarti and Grossman, Robert L},
-  journal={arXiv preprint arXiv:2507.02221},
-  year={2025}
+  journal={Bioinformatics Advances},
+  pages={vbaf295},
+  year={2025},
+  publisher={Oxford University Press}
 }
 ```
