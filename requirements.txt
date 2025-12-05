@@ -1,4 +1,5 @@
 accelerate==1.1.1
+bert_score==0.3.13
 datasets==3.1.0
 detect-secrets==1.5.0
 docker==7.0.0
@@ -29,3 +30,6 @@ transformers==4.50.0
 trl==0.12.1
 vllm==0.6.4.post1
 wandb==0.19.7
+# annoying bugfix: https://xkcd.com/2347/
+outlines==0.0.46
+pyairports @ git+https://github.com/StevenSong/pyairports.git@f611ee5a5a82b4e98b22641bb99693d862c802e4

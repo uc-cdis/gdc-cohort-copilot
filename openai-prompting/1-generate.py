@@ -94,6 +94,7 @@ def main(args):
                 }
             )
             temp.to_csv(args.output_csv, index=False, mode="a", header=header)
+            header = False
             pbar.update(1)
 
 
